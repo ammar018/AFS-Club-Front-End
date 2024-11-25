@@ -41,6 +41,20 @@
       </header>
       <!-- Main Product Section -->
       <main>
+        <!-- Sort By Section -->
+        <div class="sort-by">
+          <label for="sort-by">Sort By:</label>
+          <select v-model="sortBy" id="sort-by">
+            <option value="subject">Subject</option>
+            <option value="location">Location</option>
+            <option value="price">Price</option>
+            <option value="availableInventory">Availability</option>
+          </select>
+          <button class="sort-button" @click="toggleSortOrder">
+            <i :class="sortOrder === 'asc' ? 'fas fa-arrow-up' : 'fas fa-arrow-down'"></i>
+          </button>
+        </div>
+
         <section id="product-section" class="fade-in">
           <div id="product-section" v-if="!showCheckoutForm">
             <!-- Product Display Section -->
@@ -88,6 +102,7 @@
     <footer class="footer">
       <p>&copy; 2024 All rights reserved | AFS Club</p>
     </footer>
+    <!-- Vue.js Script Section -->
     <script>
       var webstore = new Vue({
         el: "#app",
@@ -98,7 +113,68 @@
           searchQuery: "",
           sortBy: "subject",
           sortOrder: "asc",
+          showCheckoutForm: false,
+          hoveredProduct: null,
+          order: {
+            firstName: "",
+            lastName: "",
+            address: "",
+            emirate: "",
+            area: "",
+            zip: "",
+            method: "Home",
+            gift: false,
+          },
+          emirate: {
+            DXB: "Dubai",
+            AUH: "Abu Dhabi",
+            SHJ: "Sharjah",
+            RAK: "Ras Al Khaimah",
+            AJM: "Ajman",
+            FUJ: "Fujairah",
+            UAQ: "Umm Al Quiwain",
+          },
+          cartOpen: false,
         },
+        computed: {
+          filteredAndSortedProducts() {
+            let filtered = this.products.filter((product) => {
+              return (
+                product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || // Filter by product title
+                product.location.toLowerCase().includes(this.searchQuery.toLowerCase()) // Filter by location
+              );
+            });
+
+            // Now, sort the filtered products
+            return filtered.sort((a, b) => {
+              let result = 0;
+              if (this.sortBy === "price" || this.sortBy === "availableInventory") {
+                result = a[this.sortBy] - b[this.sortBy];
+              } else {
+                result = a[this.sortBy].localeCompare(b[this.sortBy]);
+              }
+              return this.sortOrder === "asc" ? result : -result;
+            });
+          },
+          cartItemCount() {
+            return this.cart.reduce((total, item) => total + item.quantity, 0);
+          },
+          totalPrice() {
+            return this.cart.reduce((total, item) => total + item.price * item.quantity, 0);
+          },
+          isFormValid() {
+            return (
+              this.order.firstName &&
+              this.order.lastName &&
+              this.order.address &&
+              this.order.city &&
+              this.order.emirate &&
+              this.order.zip &&
+              this.contactNumber
+            );
+          },
+        },
+
         methods: {
           search() {
             console.log(`Searching for: ${this.searchQuery}`);
@@ -107,6 +183,63 @@
             this.cartOpen = !this.cartOpen;
           },
           toggleHome() {
+            this.showCheckoutForm = false;
+          },
+          incrementQuantity(item) {
+            if (item.quantity < 5) {
+              item.quantity++;
+            }
+          },
+          decrementQuantity(item) {
+            if (item.quantity > 1) {
+              item.quantity--;
+            }
+          },
+          removeFromCart(item) {
+            const index = this.cart.indexOf(item);
+            if (index !== -1) {
+              this.cart.splice(index, 1);
+            }
+          },
+
+          addToCart(product) {
+            const cartItem = this.cart.find((item) => item.id === product.id);
+            if (cartItem) {
+              if (cartItem.quantity < 5) {
+                cartItem.quantity++;
+              }
+            } else {
+              this.cart.push({ ...product, quantity: 1 });
+            }
+          },
+          cartCount(id) {
+            const item = this.cart.find((item) => item.id === id);
+            return item ? item.quantity : 0;
+          },
+          canAddToCart(product) {
+            return product.availableInventory > this.cartCount(product.id);
+          },
+          toggleSortOrder() {
+            this.sortOrder = this.sortOrder === "asc" ? "desc" : "asc";
+          },
+          submitForm() {
+            if (!this.isFormValid) {
+              alert("Please fill in all the required fields.");
+              return;
+            }
+            alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
+            console.log(this.order);
+            this.order = {
+              firstName: "",
+              lastName: "",
+              address: "",
+              city: "",
+              emirate: "",
+              zip: "",
+              method: "Home",
+              gift: false,
+            };
+            this.cart = [];
             this.showCheckoutForm = false;
           },
         },
