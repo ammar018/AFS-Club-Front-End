@@ -167,7 +167,30 @@
 
           </form>
         </div>
+ <!-- Right Section: Order Details -->
+        
+ <div class="order-details">
+    <h2>Order Details</h2>
 
+    <div class="order-details-box">
+      <ul>
+        <li v-for="item in cart" :key="item.id" class="cart-item">
+          <div class="product-info">
+            <img :src="item.image" alt="Product Image" style="width: 50px; height: 50px; margin-right: 10px" />
+            <div>
+              <span class="product-title">{{ item.title }}</span><br />
+              <span class="product-price">Price: AED {{ item.price }}</span><br />
+              <span class="product-quantity">
+                Quantity:
+                <button @click="decrementQuantity(item)" :disabled="item.quantity <= 1">-</button>
+                {{ item.quantity }}
+                <button @click="incrementQuantity(item)" :disabled="item.quantity >= 5">+</button>
+              </span>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
     </div>
     <!-- Footer Section -->
     <footer class="footer">
