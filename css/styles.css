@@ -15,6 +15,16 @@ body {
     padding: 20px;
     background-color: #f9f9f9;
 }
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    width: 80vw;
+    padding: 20px;
+    gap: 20px;
+    flex-grow: 1;
+}
+
 /* Header Styles */
 header {
     width: 100%;
@@ -98,3 +108,282 @@ h1 {
   .footer p {
     margin: 0;
   }
+
+/* Shopping Cart */
+.shopping-cart {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    background-color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.shopping-cart-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: transform 0.3s ease;
+}
+
+.shopping-cart-icon:hover {
+    transform: scale(1.2);
+}
+
+.cart-details {
+    display: none;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    z-index: 20;
+}
+
+.cart-details.active {
+    display: block;
+}
+
+
+/* Product Section */
+#product-section {
+    padding: 20px;
+    width: 100%;
+}
+
+.sort-by {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.sort-by select {
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1em;
+    margin-right: 1000px;
+}
+
+.sort-button {
+    background-color: #2f2552;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1em;
+}
+
+.sort-button i {
+    font-size: 16px;
+}
+
+.product-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-box {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding-top: 15px;
+    text-align: center;
+    margin: 10px;
+    flex: 1 1 calc(25% - 20px);
+    max-width: calc(25% - 20px);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+}
+
+.product-box img {
+    width: 100%; /* Set the width to 100% of the container */
+    height: 200px;
+    height: 200px; /* Set a fixed height */
+    object-fit: cover; /* Ensures the image fills the box while maintaining aspect ratio */
+    border-radius: 5px; /* Keeps the rounded corners */
+}
+
+.product-box h2 {
+    font-size: 1.5em;
+    margin: 10px 0;
+}
+
+.product-box p {
+    color: #666;
+    margin: 5px 0;
+}
+
+.product-box:hover {
+    transform: scale(1.05);
+}
+
+.add-to-cart {
+    background: #2f2552;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin: 10px auto 0 auto;
+    display: block;
+    width: 100%;
+}
+
+.add-to-cart:hover {
+    background: #2f2552;
+}
+
+/* Checkout Form Styles */
+.checkout-form-container {
+    width: 60%;
+    padding: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.checkout-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.checkout-form h2 {
+    font-size: 1.8em;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.form-group input,
+.form-group select {
+    padding: 12px;
+    font-size: 1em;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.radio-group {
+    margin-top: 15px;
+}
+
+.radio-group div {
+    margin-bottom: 10px;
+}
+
+.checkbox-group {
+    margin-top: 10px;
+}
+
+.checkout-form button {
+    background-color: #2f2552;
+    color: white;
+    border: 1px solid #ccc;
+    padding: 12px;
+    font-size: 1em;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: border-color 0.3s ease;
+}
+
+.checkout-form button:hover {
+    background-color: #ad0707;
+}
+
+/* Order Details */
+.order-details {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 35%;
+    margin-left: 20px;
+}
+
+.order-details h3 {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* Separate Box for Order Details (Products, Quantities, etc.) */
+.order-details-box {
+    background-color: white;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.order-details p {
+    margin: 10px 0;
+    font-size: 1.1em;
+}
+
+/* Styling for the Total Section */
+.total-section {
+    margin-top: 15px;
+}
+
+.total-section div {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+/* Shipment Section */
+.shipment-section {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+.shipment-info img {
+    width: 80px;
+    margin-right: 10px;
+}
+
+.shipment-info div {
+    padding: 15px;
+    border-top: 1px solid #ddd;
+}
+
+/* Accordion */
+.accordion-item {
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+    cursor: pointer;
+}
+
+.accordion-item-title {
+    font-weight: bold;
+}
+
