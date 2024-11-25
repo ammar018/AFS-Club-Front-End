@@ -97,6 +97,77 @@
           </div>
         </section>
       </main>
+       <!-- Checkout Form Section -->
+       <div class="container" v-if="showCheckoutForm">
+        <!-- Left Section: Checkout Form -->
+        <div class="checkout-form-container">
+          <form class="checkout-form">
+            <h2>Checkout</h2>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="firstName">First Name:</label>
+                <input v-model="order.firstName" id="firstName" type="text" placeholder="Zayn" />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name:</label>
+                <input v-model="order.lastName" id="lastName" type="text" placeholder="Malik" />
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="address">Address:</label>
+              <input v-model="order.address" id="address" type="text" placeholder="Ocean Drive St" />
+            </div>
+            <div class="form-group">
+              <label for="city">City:</label>
+              <input v-model="order.city" id="city" type="text" placeholder="City" />
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="emirate">Emirate:</label>
+                <select v-model="order.emirate" id="emirate">
+                  <option disabled value="">Select Emirate</option>
+                  <option v-for="(emirateName, emirateCode) in emirate" :value="emirateCode">{{ emirateName }}</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="contactNumber">Contact Number:</label>
+                <input v-model="contactNumber" id="contactNumber" type="text" placeholder="00971500000000" />
+              </div>
+              <div class="form-group">
+                <label for="zip">Zip/Postal Code:</label>
+                <input v-model.number="order.zip" id="zip" type="number" placeholder="12345" />
+              </div>
+            </div>
+            <h2>Order Information</h2>
+            <p>First Name: {{ order.firstName }}</p>
+            <p>Last Name: {{ order.lastName }}</p>
+            <p>Address: {{ order.address }}</p>
+            <p>City: {{ order.city }}</p>
+            <p>Emirate: {{ order.emirate }}</p>
+            <p>Contact Number: {{contactNumber}}</p>
+            <p>Zip: {{ order.zip }}</p>
+
+            <div class="radio-group">
+              <label>Shipping Method:</label>
+              <div>
+                <input type="radio" id="home" value="Home" v-model="order.method" />
+                <label for="home">Home</label>
+              </div>
+              <div>
+                <input type="radio" id="business" value="Business" v-model="order.method" />
+                <label for="business">Business</label>
+              </div>
+            </div>
+            <div class="checkbox-group">
+              <input type="checkbox" id="gift" v-model="order.gift" />
+              <label for="gift">Ship as Gift?</label>
+            </div>
+            <!-- Checkout Form Section -->
+<button type="button" @click="submitForm" :disabled="!isFormValid">Place Order</button>
+
+          </form>
+        </div>
+
     </div>
     <!-- Footer Section -->
     <footer class="footer">
