@@ -39,6 +39,50 @@
           </button>
         </form>
       </header>
+      <!-- Main Product Section -->
+      <main>
+        <section id="product-section" class="fade-in">
+          <div id="product-section" v-if="!showCheckoutForm">
+            <!-- Product Display Section -->
+            <div class="product-container">
+              <div
+                class="product-box"
+                v-for="product in filteredAndSortedProducts"
+                :key="product.id"
+                @mouseover="hoveredProduct = product.id"
+                @mouseleave="hoveredProduct = null"
+              >
+                <figure>
+                  <img :src="product.image" alt="Product Image" />
+                </figure>
+                <h2>{{ product.title }}</h2>
+                <p>Location: {{ product.location }}</p>
+                <p>Price: ${{ product.price }}</p>
+                <p>Availability: {{ product.availableInventory }}</p>
+
+                <!-- Rating with Stars -->
+                <div>
+                  <span v-for="n in product.rating" :key="'filled' + n">★</span>
+                  <span v-for="n in (5 - product.rating)" :key="'empty' + n">☆</span>
+                </div>
+
+                <!-- Inventory Message -->
+                <span v-if="product.availableInventory === cartCount(product.id)">All out!</span>
+                <span v-else>Buy now!</span>
+
+                <!-- Product Description -->
+                <p class="description">{{ product.description }}</p>
+
+                <!-- Add to Cart Button -->
+                <button class="add-to-cart" @click="addToCart(product)" v-if="canAddToCart(product)">
+                  Add to Cart
+                </button>
+                <button class="add-to-cart" disabled v-else>Add to Cart</button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
     </div>
     <!-- Footer Section -->
     <footer class="footer">
