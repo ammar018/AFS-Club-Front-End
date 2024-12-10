@@ -200,7 +200,7 @@
 
         <div class="order-details-box">
           <ul>
-            <li v-for="item in cart" :key="item.id" class="cart-item">
+            <li v-for="item in cart" :key="item._id" class="cart-item">
               <div class="product-info">
                 <img :src="imageLink(item.image)" alt="Product Image"
                   style="width: 50px; height: 50px; margin-right: 10px" />
@@ -446,7 +446,7 @@
         },
 
         cartCount(id) {
-          const item = this.cart.find((item) => item.id === id);
+          const item = this.cart.find((item) => item._id === id);
           return item ? item.quantity : 0;
         },
         canAddToCart(product) {
