@@ -427,7 +427,7 @@
           }
         },
         addToCart(product) {
-          const cartItem = this.cart.find((item) => item.id === product.id);
+          const cartItem = this.cart.find((item) => item._id === product._id);
 
           if (cartItem) {
             // If the product is already in the cart, increment the quantity
