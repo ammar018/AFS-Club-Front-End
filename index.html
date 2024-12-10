@@ -367,20 +367,35 @@
             });
         },
         fetchPutUpdate() {
-          alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
-          console.log(this.order);
-          this.order = {
-            firstName: "",
-            lastName: "",
-            address: "",
-            city: "",
-            emirate: "",
-            zip: "",
-            method: "Home",
-            gift: false,
-          };
-          this.cart = [];
-          this.showCheckoutForm = false;
+          this.cart.forEach(element => {
+              const newAvailableInventory = { availableInventory: element.availableInventory };
+              fetch(`https://afs-club-back-end.onrender.com/collection/lessons/${element._id}`, {
+                  method: 'PUT',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(newAvailableInventory),
+              })
+              .then(responseJSON => {
+                alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
+                console.log(this.order);
+                this.order = {
+                  firstName: "",
+                  lastName: "",
+                  address: "",
+                  city: "",
+                  emirate: "",
+                  zip: "",
+                  method: "Home",
+                  gift: false,
+                };
+                this.cart = [];
+                this.showCheckoutForm = false;
+              })
+              .then(data => {})
+              .catch(error => {
+                  alert(error.message);
+              });
+          })
+          
         },
         search() {
           console.log(`Searching for: ${this.searchQuery}`);
