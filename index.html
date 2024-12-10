@@ -444,19 +444,7 @@
             return; // Prevent form submission
           }
           alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
-          console.log(this.order);
-          this.order = {
-            firstName: "",
-            lastName: "",
-            address: "",
-            city: "",
-            emirate: "",
-            zip: "",
-            method: "Home",
-            gift: false,
-          };
-          this.cart = [];
-          this.showCheckoutForm = false; // Go back to product section
+          this.fetchPostOrder();
         },
       },
     });
