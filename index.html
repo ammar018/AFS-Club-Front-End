@@ -282,12 +282,7 @@
       },
       computed: {
         filteredAndSortedProducts() {
-          let filtered = this.products.filter((product) => {
-            return (
-              product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || // Filter by product title
-              product.location.toLowerCase().includes(this.searchQuery.toLowerCase()) // Filter by location
-            );
-          });
+          let filtered = this.fetchGetSearch();
 
           // Sort the filtered products
           return filtered.sort((a, b) => {
@@ -393,7 +388,26 @@
                   alert(error.message);
               });
           })
-          
+        },
+        fetchGetSearch() {
+          if(this.searchQuery){
+            fetch(`https://afs-club-back-end.onrender.com/collection/lessons?q=${this.searchQuery}`, {
+            method: "GET", // set the HTTP method as 'GET'
+            headers: {
+              "Content-Type": "application/json", // set the data type as JSON
+            },
+          })
+            .then((response) => response.json())
+            .then((responseJSON) => {
+              this.products = responseJSON;
+            })
+            .catch((error) => {
+              document.getElementById("error").innerText = error;
+            });
+          }
+          else {
+            this.fetchGetProducts();
+          }
         },
         search() {
           console.log(`Searching for: ${this.searchQuery}`);
