@@ -405,14 +405,14 @@
           this.showCheckoutForm = false;
         },
         incrementQuantity(item) {
-          const product = this.products.find((p) => p.id === item.id);
+          const product = this.products.find((p) => p._id === item._id);
           if (item.quantity > 0) {
             item.quantity++;
             product.availableInventory--; // Decrease inventory when quantity increases
           }
         },
         decrementQuantity(item) {
-          const product = this.products.find((p) => p.id === item.id);
+          const product = this.products.find((p) => p._id === item._id);
           if (item.quantity > 1) {
             item.quantity--;
             product.availableInventory++; // Decrease inventory when quantity increases
@@ -421,7 +421,7 @@
         removeFromCart(item) {
           const index = this.cart.indexOf(item);
           if (index !== -1) {
-            const product = this.products.find((p) => p.id === item.id);
+            const product = this.products.find((p) => p._id === item._id);
             product.availableInventory += item.quantity
             this.cart.splice(index, 1);
           }
