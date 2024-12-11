@@ -124,7 +124,7 @@
                 </div>
 
                 <!-- Inventory Message -->
-                <span v-if="product.availableInventory === cartCount(product._id)">All out!</span>
+                <span v-if="product.availableInventory === 0 ">All out!</span>
                 <span v-else>Buy now! Only {{ product.availableInventory }} left</span>
 
                 <!-- Product Description -->
