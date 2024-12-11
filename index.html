@@ -32,7 +32,7 @@
 
       <!-- Search Bar -->
       <form class="search-bar">
-        <input type="text" placeholder="Search..." class="search-input" v-model="searchQuery" />
+        <input type="text" placeholder="Search..." class="search-input" v-model="searchQuery" v-on:input="fetchGetSearch"/>
         <i class="fas fa-search"></i>
       </form>
     </header>
@@ -282,7 +282,7 @@
       },
       computed: {
         filteredAndSortedProducts() {
-          let filtered = this.fetchGetSearch();
+          let filtered = this.products;
 
           // Sort the filtered products
           return filtered.sort((a, b) => {
