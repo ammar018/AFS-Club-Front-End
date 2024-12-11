@@ -13,7 +13,7 @@
 
     <!-- Vue.js CDN for frontend logic -->
     <script src="https://cdn.jsdelivr.net/npm/vue@2.7.16/dist/vue.js"></script>
-    <script src="product.js"></script>
+    <!-- <script src="product.js"></script> -->
   </head>
 
   <body>
@@ -34,7 +34,13 @@
 
         <!-- Search Bar -->
         <form class="search-bar">
-          <input type="text" placeholder="Search..." class="search-input" v-model="searchQuery" />
+          <input
+            type="text"
+            placeholder="Search..."
+            class="search-input"
+            v-model="searchQuery"
+            v-on:input="fetchGetSearch"
+          />
           <i class="fas fa-search"></i>
         </form>
       </header>
@@ -210,7 +216,7 @@
 
           <div class="order-details-box">
             <ul>
-              <li v-for="item in cart" :key="item.id" class="cart-item">
+              <li v-for="item in cart" :key="item._id" class="cart-item">
                 <div class="product-info">
                   <img
                     :src="imageLink(item.image)"
@@ -267,7 +273,7 @@
         el: "#app",
         data: {
           sitename: "AFS Club",
-          products: products,
+          products: [],
           cart: [],
           searchQuery: "",
           sortBy: "subject",
@@ -298,12 +304,7 @@
         },
         computed: {
           filteredAndSortedProducts() {
-            let filtered = this.products.filter((product) => {
-              return (
-                product.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || // Filter by product title
-                product.location.toLowerCase().includes(this.searchQuery.toLowerCase()) // Filter by location
-              );
-            });
+            let filtered = this.products;
 
             // Sort the filtered products
             return filtered.sort((a, b) => {
@@ -333,6 +334,9 @@
               this.order.contactNumber
             );
           },
+        },
+        created() {
+          this.fetchGetProducts();
         },
         methods: {
           removeFromOrder(item) {
@@ -371,7 +375,6 @@
                 return response.json();
               })
               .then((responseJSON) => {
-                console.log("Order submitted successfully", responseJSON);
                 this.fetchPutUpdate();
               })
               .catch((error) => {
@@ -379,22 +382,54 @@
                 alert("Order submission failed. Please try again.");
               });
           },
-          // fetchPutUpdate() {
-          //   alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
-          //   console.log(this.order);
-          //   this.order = {
-          //     firstName: "",
-          //     lastName: "",
-          //     address: "",
-          //     city: "",
-          //     emirate: "",
-          //     zip: "",
-          //     method: "Home",
-          //     gift: false,
-          //   };
-          //   this.cart = [];
-          //   this.showCheckoutForm = false;
-          // },
+          fetchPutUpdate() {
+            this.cart.forEach((element) => {
+              const newAvailableInventory = { availableInventory: element.availableInventory - element.quantity };
+              fetch(`https://afs-club-back-end.onrender.com/collection/lessons/${element._id}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newAvailableInventory),
+              })
+                .then((responseJSON) => {
+                  alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
+                  this.order = {
+                    firstName: "",
+                    lastName: "",
+                    address: "",
+                    city: "",
+                    emirate: "",
+                    zip: "",
+                    method: "Home",
+                    gift: false,
+                  };
+                  this.cart = [];
+                  this.showCheckoutForm = false;
+                })
+                .then((data) => {})
+                .catch((error) => {
+                  alert(error.message);
+                });
+            });
+          },
+          fetchGetSearch() {
+            if (this.searchQuery) {
+              fetch(`https://afs-club-back-end.onrender.com/search/lessons?q=${this.searchQuery}`, {
+                method: "GET", // set the HTTP method as 'GET'
+                headers: {
+                  "Content-Type": "application/json", // set the data type as JSON
+                },
+              })
+                .then((response) => response.json())
+                .then((responseJSON) => {
+                  this.products = responseJSON;
+                })
+                .catch((error) => {
+                  document.getElementById("error").innerText = error;
+                });
+            } else {
+              this.fetchGetProducts();
+            }
+          },
           search() {
             console.log(`Searching for: ${this.searchQuery}`);
           },
@@ -405,25 +440,29 @@
             this.showCheckoutForm = false;
           },
           incrementQuantity(item) {
-            const product = this.products.find((p) => p.id === item.id);
+            const product = this.products.find((p) => p._id === item._id);
             if (item.quantity > 0) {
               item.quantity++;
               product.availableInventory--; // Decrease inventory when quantity increases
             }
           },
           decrementQuantity(item) {
+            const product = this.products.find((p) => p._id === item._id);
             if (item.quantity > 1) {
               item.quantity--;
+              product.availableInventory++; // Decrease inventory when quantity increases
             }
           },
           removeFromCart(item) {
             const index = this.cart.indexOf(item);
             if (index !== -1) {
+              const product = this.products.find((p) => p._id === item._id);
+              product.availableInventory += item.quantity;
               this.cart.splice(index, 1);
             }
           },
           addToCart(product) {
-            const cartItem = this.cart.find((item) => item.id === product.id);
+            const cartItem = this.cart.find((item) => item._id === product._id);
 
             if (cartItem) {
               // If the product is already in the cart, increment the quantity
@@ -442,7 +481,7 @@
           },
 
           cartCount(id) {
-            const item = this.cart.find((item) => item.id === id);
+            const item = this.cart.find((item) => item._id === id);
             return item ? item.quantity : 0;
           },
           canAddToCart(product) {
@@ -457,19 +496,7 @@
               return; // Prevent form submission
             }
             alert(`Order Submitted for ${this.order.firstName} ${this.order.lastName}!`);
-            console.log(this.order);
-            this.order = {
-              firstName: "",
-              lastName: "",
-              address: "",
-              city: "",
-              emirate: "",
-              zip: "",
-              method: "Home",
-              gift: false,
-            };
-            this.cart = [];
-            this.showCheckoutForm = false; // Go back to product section
+            this.fetchPostOrder();
           },
         },
       });
