@@ -391,7 +391,7 @@
         },
         fetchGetSearch() {
           if(this.searchQuery){
-            fetch(`https://afs-club-back-end.onrender.com/collection/lessons?q=${this.searchQuery}`, {
+            fetch(`https://afs-club-back-end.onrender.com/search/lessons?q=${this.searchQuery}`, {
             method: "GET", // set the HTTP method as 'GET'
             headers: {
               "Content-Type": "application/json", // set the data type as JSON
