@@ -340,10 +340,7 @@
         },
         methods: {
           removeFromOrder(item) {
-            const index = this.cart.indexOf(item);
-            if (index !== -1) {
-              this.cart.splice(index, 1);
-            }
+            this.removeFromCart(item);
           },
           imageLink(image) {
             return `https://afs-club-back-end.onrender.com/${image}`;
